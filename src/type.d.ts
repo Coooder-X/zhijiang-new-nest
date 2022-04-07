@@ -14,3 +14,16 @@ interface User {
 	uid: string;
 	name: string;
 }
+
+// enum FileType {
+// 	Category,
+// 	Folder,
+// 	File,
+// }
+
+class TreeData {
+	id: string;
+	label: string;
+	type: FileType;
+	children?: TreeData[];
+}
