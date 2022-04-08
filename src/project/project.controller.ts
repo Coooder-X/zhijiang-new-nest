@@ -167,4 +167,9 @@ export class ProjectController {
 		const { id } = query;
 		this.projectList = this.projectList.filter(prj => prj.id != id);
 	}
+
+	@Post('createProject')
+	createProject(@Body() param) {
+		this.projectList.push(param);
+	}
 }
