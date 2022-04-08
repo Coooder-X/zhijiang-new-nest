@@ -96,6 +96,25 @@ export class DatasetController {
 		this.dfsRename(fid, newName, tmp)
 		this.uid_dataset.set(param.uid, tmp);
 	}
+
+	@Post('uploadFile')
+	uploadFile(@Body() param) {
+		const { uid, folder, fileName, newFid } = param;
+		const { id } = folder;
+		const tmp = this.uid_dataset.get(uid);
+		const newFile: TreeData = {
+			type: FileType.File,
+			id: newFid,
+			label: fileName
+		}
+		for (let folder of tmp) {
+			if (folder.id === id) {
+				folder.children.push(newFile);
+				break;
+			}
+		}
+		this.uid_dataset.set(param.uid, tmp);
+	}
 }
 enum FileType {
 	Category,
