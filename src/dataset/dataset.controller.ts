@@ -2,6 +2,8 @@ import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 
 @Controller('dataset')
 export class DatasetController {
+	private fid_file: Map<string, any[]> = new Map();
+
 	private uid_dataset: Map<string, TreeData[]> = new Map([
 		['22151123', [
 			{
@@ -72,13 +74,13 @@ export class DatasetController {
 
 	@Get()
 	getDataSet(@Query() query): TreeData[] {
-		console.log('getdata', query);
+		// console.log('getdata', query);
 		return this.uid_dataset.get(query.uid);
 	}
 
 	@Post('createCategory')
 	createCategory(@Body() param) {
-		console.log(param);
+		// console.log(param);
 		this.uid_dataset.get(param.uid).push(param.data);
 	}
 
@@ -99,7 +101,7 @@ export class DatasetController {
 
 	@Post('uploadFile')
 	uploadFile(@Body() param) {
-		const { uid, folder, fileName, newFid } = param;
+		const { uid, folder, fileName, newFid, fileList } = param;
 		const { id } = folder;
 		const tmp = this.uid_dataset.get(uid);
 		const newFile: TreeData = {
@@ -113,7 +115,15 @@ export class DatasetController {
 				break;
 			}
 		}
+		this.fid_file.set(newFid, fileList[0])
+		// console.log('fileList', fileList);
 		this.uid_dataset.set(param.uid, tmp);
+	}
+
+	@Get('getFile')
+	getFile(@Query() query): TreeData[] {
+		// console.log('getdata', query);
+		return this.fid_file.get(query.fid);
 	}
 }
 enum FileType {
